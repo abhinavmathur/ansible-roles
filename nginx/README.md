@@ -1,7 +1,7 @@
-Role Name
+NGINX with TLS
 =========
 
-A brief description of the role goes here.
+This is a basic implementation of nginx with TLS support.
 
 Requirements
 ------------
