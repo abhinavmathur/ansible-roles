@@ -1,0 +1,39 @@
+---
+# tasks file for nginx
+- name: install Nginx
+  apt: name=nginx update_cache=true state=present cache_valid_time=3600
+
+- name: create directory for ssl
+  file: path=/etc/nginx/ssl state=directory
+
+- name: copy TLS key
+  copy: src=files/nginx.key dest={{ key_file }} owner=test mode=0775
+  notify: restart nginx
+
+- name: copy TLS cert
+  copy: src=files/nginx.crt dest={{ cert_file }}
+  notify: restart nginx
+
+- name: Copy nginx config file
+  template: src=templates/nginx.j2 dest={{ conf_file }}
+  notify: restart nginx
+
+- name: enable configuration
+  file: >
+    dest=/etc/nginx/sites-enabled/default
+    src=/etc/nginx/sites-available/default
+    state=link
+
+- name: create the server directory
+  file: path=/var/www/sample state=directory mode=0775   
+
+- name: copy index.html
+  template: src=templates/index.html.j2 dest=/var/www/sample/index.html
+  notify: restart nginx
+
+- name: check for style errors in nginx
+  command: nginx -t
+  register: output
+
+- name: debug nginx style errors if any
+  debug: msg={{ output.stderr }} 
