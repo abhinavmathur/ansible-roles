@@ -11,3 +11,6 @@ ansible_python_interpreter=/usr/bin/python
 
 [test_server_2]
 0.0.0.0
+
+[test_server_2:vars]
+ansible_python_interpreter=/usr/bin/python
