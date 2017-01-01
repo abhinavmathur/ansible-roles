@@ -1,0 +1,54 @@
+---
+# tasks file for nginx-passenger
+- block:
+  - apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: 561F9B9CAC40B2F7
+      state: present
+
+  - name: Install HTTPS support for APT
+    apt: name={{ item }} state=present
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+
+  - name: Add Passenger apt repository
+    apt_repository:
+      repo: deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main
+      state: present
+      update_cache: yes
+
+  - name: Install Nginx and Passenger
+    apt: name={{ item }} state=installed
+    with_items:
+      - nginx-extras
+      - passenger
+
+  - name: Copy Nginx config to server
+    template:
+      src: templates/nginx.conf.j2
+      dest: /etc/nginx/nginx.conf
+    notify: restart nginx
+
+  - name: Configure passenger virtual host
+    template:
+      src: passenger.j2
+      dest: /etc/nginx/sites-available/passenger
+    notify: restart nginx
+
+  - name: Ensure passenger virtual host is enabled
+    file:
+      src: /etc/nginx/sites-available/passenger
+      dest: /etc/nginx/sites-enabled/passenger
+      state: link  
+
+  - name: Ensure default virtual host is removed
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+    when: remove_default_vhost
+    notify: restart nginx
+
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+  become: true
+   

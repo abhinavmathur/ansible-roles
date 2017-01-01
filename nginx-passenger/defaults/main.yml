@@ -1,0 +1,23 @@
+---
+# defaults file for nginx-passenger
+
+#Nginx settings
+#----------------------------------------------------------------------------------------------
+#nginx/nginx.conf
+nginx_user: www-data
+worker_processes: "{{ ansible_processor_vcpus | default(ansible_processor_count) }}"
+worker_connections: "768"
+keepalive_timeout: "65"
+remove_default_vhost: true
+
+#Passenger settings
+#----------------------------------------------------------------------------------------------
+#sites-available/passenger
+server_name: localhost
+root_directory: /var/www/sample
+env: staging
+
+#nginx/passenger.conf
+passenger_root: /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini
+passenger_ruby: /usr/bin/ruby
+

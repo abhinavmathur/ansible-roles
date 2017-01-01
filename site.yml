@@ -4,4 +4,4 @@
   remote_user: test
   become: True
   roles:
-    - nginx
+    - nginx-passenger
