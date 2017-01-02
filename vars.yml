@@ -1,0 +1,3 @@
+admin_user: test
+local_user: hackernest
+should_upgrade: false

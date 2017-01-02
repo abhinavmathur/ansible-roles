@@ -1,0 +1,29 @@
+---
+- name: Configure webserver with nginx
+  hosts: test_server
+  remote_user: test
+  become: True
+  gather_facts: false
+
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+
+     - raw: apt-get -y install python
+
+     - name: add user to the server
+       authorized_key:
+         user: test
+         state: present
+         key: "{{ lookup('file', '/home/hackernest/.ssh/id_rsa.pub') }}"
+
+
+
+  tasks:
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+      when: "{{ should_upgrade }}"  
+
+    - action: setup

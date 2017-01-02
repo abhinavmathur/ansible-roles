@@ -4,7 +4,7 @@
 192.168.0.54 ansible_ssh_user=deploy
 
 [test_server]
-192.168.0.39 ansible_ssh_user=test
+192.168.0.39 ansible_ssh_user=test ansible_ssh_pass=hackernest
 
 [test_server:vars]
 ansible_python_interpreter=/usr/bin/python
