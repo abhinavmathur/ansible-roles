@@ -1,0 +1,8 @@
+---
+# defaults file for rbenv
+default_user: test
+home_directory: /home/{{ default_user }}
+bashrc_path: '~/.bashrc'
+
+rbenv:
+  user_path: '~/.rbenv'

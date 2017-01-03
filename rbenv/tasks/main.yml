@@ -1,0 +1,29 @@
+---
+# tasks file for rbenv
+- name: Update cache
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: install rbenv requirements
+  apt: name={{ item }} state=present
+  with_items:
+    - autoconf 
+    - bison 
+    - build-essential 
+    - libssl-dev 
+    - libyaml-dev 
+    - libreadline6-dev 
+    - zlib1g-dev 
+    - libncurses5-dev 
+    - libffi-dev 
+    - libgdbm3 
+    - libgdbm-dev
+
+- git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: "{{ home_directory }}/.rbenv"
+    
+
+- name: add rbenv initialization
+  template: src=templates/rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner={{ default_user }} mode=0755
