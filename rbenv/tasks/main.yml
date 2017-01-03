@@ -20,10 +20,22 @@
     - libgdbm3 
     - libgdbm-dev
 
+- file:
+    path: "{{home_directory}}/.rbenv"
+    state: directory
+    mode: 0770
+
 - git:
     repo: https://github.com/rbenv/rbenv.git
-    dest: "{{ home_directory }}/.rbenv"
+    dest: "{{ home_directory }}/.rbenv owner={{ default_user}} mode=770"
     
 
 - name: add rbenv initialization
   template: src=templates/rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner={{ default_user }} mode=0755
+
+
+- name: Make rbenv readable
+  file:
+    path: "{{ home_directory }}/.rbenv"
+    mode: u=rwX,g=rX,o=rX
+    recurse: yes

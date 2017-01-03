@@ -1,0 +1,26 @@
+---
+# tasks file for ruby
+- name: Install ruby build
+  apt:
+    name: ruby-build
+    state: present
+    update_cache: true
+
+
+- name: Install available versions of ruby
+  command: rbenv install -l
+  register: output
+
+- debug: msg={{output.stdout}}
+
+- name: Install ruby version -> {{ ruby.version }}
+  command: rbenv install {{ ruby.version }}
+  ignore_errors: true
+
+- name: check ruby version on system
+  command: ruby -v
+  register: output
+
+- debug:
+    msg: "Ruby version is -> {{ output.stdout }}"
+  

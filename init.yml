@@ -10,7 +10,8 @@
 
   pre_tasks:
 
-     - raw: apt-get -y install python
+     - name: Install python
+       raw: apt-get -y install python 
 
      - name: add user to the server
        authorized_key:

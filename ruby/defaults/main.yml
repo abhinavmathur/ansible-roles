@@ -1,0 +1,7 @@
+---
+# defaults file for ruby
+default_user: test
+home_directory: /home/{{ default_user}}
+
+ruby:
+  version: 2.1.3
